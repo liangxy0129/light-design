@@ -1,0 +1,1764 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Light Design - 组件库</title>
+          <style>
+        /* Ant Design Token 变量 */
+        :root {
+            --colorPrimary: #1677ff;
+            --colorPrimaryBg: #e6f4ff;
+            --colorText: rgba(0, 0, 0, 0.88);
+            --colorTextSecondary: rgba(0, 0, 0, 0.45);
+            --colorFillQuaternary: rgba(0, 0, 0, 0.02);
+            --borderRadius: 8px; /* AntD V5 标志性圆角 */
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', sans-serif;
+            height: 100vh;
+            overflow: hidden;
+            background-color: #fafafa;
+        }
+
+        /* 顶部导航 */
+        .navbar {
+            background-color: #fff;
+            height: 64px;
+            padding: 0 40px;
+            display: flex;
+            align-items: center;
+            box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.03), 0 1px 6px -1px rgba(0, 0, 0, 0.02), 0 2px 4px 0 rgba(0, 0, 0, 0.02);
+            position: relative;
+            z-index: 10;
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+        .navbar-brand {
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--colorText);
+            flex: 1;
+        }
+
+        .navbar-actions {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+        }
+
+        .save-mode-indicator {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            padding: 4px 12px;
+            font-size: 12px;
+            color: var(--colorTextSecondary);
+            background-color: var(--colorFillQuaternary);
+            border-radius: 4px;
+        }
+
+        .save-mode-indicator.github-mode {
+            background-color: #f6ffed;
+            color: #52c41a;
+            border: 1px solid #b7eb8f;
+        }
+
+        .status-dot {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background-color: currentColor;
+        }
+
+        /* 主容器 */
+        .container {
+            display: flex;
+            height: calc(100vh - 64px);
+        }
+
+        /* --- Ant Design Menu 风格侧边栏 --- */
+        .sidebar {
+            width: 260px;
+            background-color: #fff;
+            border-right: 1px solid #f0f0f0;
+            overflow-y: auto;
+            padding: 0;
+            user-select: none;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* 搜索栏容器 */
+        .search-container {
+            padding: 16px;
+            border-bottom: 1px solid #f0f0f0;
+            background-color: #fff;
+            position: sticky;
+            top: 0;
+            z-index: 5;
+        }
+
+        /* 搜索输入框 */
+        .search-input {
+            width: 100%;
+            height: 32px;
+            padding: 4px 11px;
+            font-size: 14px;
+            line-height: 1.5715;
+            color: var(--colorText);
+            background-color: #fff;
+            border: 1px solid #d9d9d9;
+            border-radius: 6px;
+            transition: all 0.3s;
+            outline: none;
+        }
+
+        .search-input:hover {
+            border-color: var(--colorPrimary);
+        }
+
+        .search-input:focus {
+            border-color: var(--colorPrimary);
+            box-shadow: 0 0 0 2px rgba(22, 119, 255, 0.1);
+        }
+
+        .search-input::placeholder {
+            color: var(--colorTextSecondary);
+        }
+
+        /* 菜单容器 */
+        .menu-container {
+            flex: 1;
+            overflow-y: auto;
+            padding: 8px;
+        }
+
+        /* 模拟 AntD Menu 结构 */
+        .ant-menu-root {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        /* 分组标题 */
+        .ant-menu-item-group-title {
+            color: var(--colorTextSecondary);
+            font-size: 12px;
+            line-height: 1.5715;
+            padding: 24px 16px 8px; /* 上边距大，下边距小 */
+            transition: all 0.3s;
+        }
+        
+        .ant-menu-item-group-title:first-child {
+            padding-top: 8px;
+        }
+
+        /* 菜单项 */
+        .ant-menu-item {
+            position: relative;
+            display: flex;
+            align-items: center;
+            height: 40px;
+            line-height: 40px;
+            padding: 0 16px 0 24px;
+            margin: 4px 0; /* 项之间的间距 */
+            font-size: 14px;
+            color: var(--colorText);
+            border-radius: var(--borderRadius); /* 圆角风格 */
+            cursor: pointer;
+            transition: background-color 0.3s, color 0.3s;
+            overflow: hidden;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+        }
+
+        /* 悬停状态 */
+        .ant-menu-item:hover {
+            color: var(--colorText);
+            background-color: var(--colorFillQuaternary); /* 极淡的灰色 */
+        }
+
+        /* 选中状态 */
+        .ant-menu-item.ant-menu-item-selected {
+            color: #007bff;
+            background-color: var(--colorPrimaryBg);
+        }
+
+        /* 选中且 Hover 时保持背景色 */
+        .ant-menu-item.ant-menu-item-selected:hover {
+            color: #007bff;
+            background-color: var(--colorPrimaryBg);
+        }
+
+        /* --- 内容区 --- */
+        .content {
+            flex: 1;
+            overflow-y: auto;
+            background-color: #fafafa;
+        }
+
+        .content-wrapper {
+            width: 100%;
+            padding: 40px;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .spec-card {
+            width: 100%;
+        }
+
+        /* 规范头部 */
+        .spec-header {
+            margin-bottom: 32px;
+        }
+
+        .spec-title-row {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 16px;
+        }
+
+        .spec-title {
+            font-size: 24px;
+            font-weight: 600;
+            color: var(--colorText);
+            margin: 0;
+        }
+
+        .spec-title a {
+            color: var(--colorText);
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .spec-title a:hover {
+            color: var(--colorPrimary);
+        }
+
+        .spec-link-icon {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 20px;
+            height: 20px;
+            color: var(--colorTextSecondary);
+            cursor: pointer;
+            transition: color 0.3s;
+        }
+
+        .spec-link-icon:hover {
+            color: var(--colorPrimary);
+        }
+
+        .spec-edit-icon {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 20px;
+            height: 20px;
+            color: var(--colorTextSecondary);
+            cursor: pointer;
+            transition: color 0.3s;
+            margin-left: auto;
+        }
+
+        .spec-edit-icon:hover {
+            color: var(--colorPrimary);
+        }
+
+        .spec-tags {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .spec-tag {
+            display: inline-flex;
+            align-items: center;
+            padding: 0 8px;
+            height: 22px;
+            font-size: 12px;
+            line-height: 20px;
+            border: 1px solid #d9d9d9;
+            border-radius: 4px;
+            background-color: #fafafa;
+            color: var(--colorText);
+        }
+
+        .spec-tag.tag-development {
+            background-color: #fff7e6;
+            border-color: #ffd591;
+            color: #d46b08;
+        }
+
+        .spec-tag.tag-module {
+            background-color: #e6f4ff;
+            border-color: #91caff;
+            color: #0958d9;
+        }
+
+        .spec-tag.tag-common {
+            background-color: #f6ffed;
+            border-color: #b7eb8f;
+            color: #389e0d;
+        }
+
+        .spec-description {
+            font-size: 14px;
+            line-height: 1.5715;
+            color: var(--colorTextSecondary);
+            margin: 0;
+        }
+
+        .image-container {
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+            width: 100%;
+        }
+
+        .component-image {
+            max-width: 100%;
+            height: auto;
+            display: block;
+            border-radius: 8px;
+            box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.03), 0 1px 6px -1px rgba(0, 0, 0, 0.02);
+        }
+
+        /* 滚动条 */
+        .menu-container::-webkit-scrollbar { width: 6px; }
+        .menu-container::-webkit-scrollbar-thumb { background-color: rgba(0, 0, 0, 0.2); border-radius: 3px; }
+        .menu-container::-webkit-scrollbar-track { background-color: transparent; }
+        .content::-webkit-scrollbar { width: 6px; }
+        .content::-webkit-scrollbar-thumb { background-color: rgba(0, 0, 0, 0.2); border-radius: 3px; }
+        .content::-webkit-scrollbar-track { background-color: transparent; }
+
+        .fade-in { animation: fadeIn 0.3s ease-in-out; }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(5px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* 模态框 */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(0, 0, 0, 0.45);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-overlay.active {
+            display: flex;
+        }
+
+        .modal {
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 6px 16px 0 rgba(0, 0, 0, 0.08), 0 3px 6px -4px rgba(0, 0, 0, 0.12), 0 9px 28px 8px rgba(0, 0, 0, 0.05);
+            width: 90%;
+            max-width: 600px;
+            max-height: 80vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .modal-header {
+            padding: 16px 24px;
+            border-bottom: 1px solid #f0f0f0;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .modal-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--colorText);
+            margin: 0;
+        }
+
+        .modal-close {
+            width: 22px;
+            height: 22px;
+            padding: 0;
+            border: none;
+            background: none;
+            cursor: pointer;
+            color: var(--colorTextSecondary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: color 0.3s;
+        }
+
+        .modal-close:hover {
+            color: var(--colorText);
+        }
+
+        .modal-body {
+            padding: 24px;
+            overflow-y: auto;
+            flex: 1;
+        }
+
+        .modal-footer {
+            padding: 10px 16px;
+            border-top: 1px solid #f0f0f0;
+            display: flex;
+            justify-content: flex-end;
+            gap: 8px;
+        }
+
+        .form-group {
+            margin-bottom: 24px;
+        }
+
+        .form-group:last-child {
+            margin-bottom: 0;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 8px;
+            font-size: 14px;
+            color: var(--colorText);
+            font-weight: 500;
+        }
+
+        .form-input,
+        .form-textarea {
+            width: 100%;
+            padding: 4px 11px;
+            font-size: 14px;
+            line-height: 1.5715;
+            color: var(--colorText);
+            background-color: #fff;
+            border: 1px solid #d9d9d9;
+            border-radius: 6px;
+            transition: all 0.3s;
+            outline: none;
+            font-family: inherit;
+        }
+
+        .form-input {
+            height: 32px;
+        }
+
+        .form-textarea {
+            min-height: 80px;
+            resize: vertical;
+        }
+
+        .form-input:hover,
+        .form-textarea:hover {
+            border-color: var(--colorPrimary);
+        }
+
+        .form-input:focus,
+        .form-textarea:focus {
+            border-color: var(--colorPrimary);
+            box-shadow: 0 0 0 2px rgba(22, 119, 255, 0.1);
+        }
+
+        .btn {
+            padding: 4px 15px;
+            height: 32px;
+            font-size: 14px;
+            border-radius: 6px;
+            border: 1px solid #d9d9d9;
+            background-color: #fff;
+            color: var(--colorText);
+            cursor: pointer;
+            transition: all 0.3s;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 4px;
+        }
+
+        .btn:hover {
+            color: var(--colorPrimary);
+            border-color: var(--colorPrimary);
+        }
+
+        .btn-primary {
+            background-color: var(--colorPrimary);
+            border-color: var(--colorPrimary);
+            color: #fff;
+        }
+
+        .btn-primary:hover {
+            background-color: #4096ff;
+            border-color: #4096ff;
+            color: #fff;
+        }
+
+        .tag-input-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            padding: 4px;
+            border: 1px solid #d9d9d9;
+            border-radius: 6px;
+            min-height: 32px;
+            transition: all 0.3s;
+        }
+
+        .tag-input-container:focus-within {
+            border-color: var(--colorPrimary);
+            box-shadow: 0 0 0 2px rgba(22, 119, 255, 0.1);
+        }
+
+        .tag-item {
+            display: inline-flex;
+            align-items: center;
+            padding: 0 8px;
+            height: 24px;
+            font-size: 12px;
+            border: 1px solid #d9d9d9;
+            border-radius: 4px;
+            background-color: #fafafa;
+            color: var(--colorText);
+            gap: 4px;
+        }
+
+        .tag-item-remove {
+            cursor: pointer;
+            color: var(--colorTextSecondary);
+            transition: color 0.3s;
+            display: flex;
+            align-items: center;
+        }
+
+        .tag-item-remove:hover {
+            color: var(--colorText);
+        }
+
+        .tag-suggestions {
+            display: flex;
+            gap: 8px;
+            margin-top: 8px;
+            flex-wrap: wrap;
+        }
+
+        .tag-suggestion {
+            padding: 2px 8px;
+            font-size: 12px;
+            border: 1px dashed #d9d9d9;
+            border-radius: 4px;
+            background-color: #fafafa;
+            color: var(--colorTextSecondary);
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .tag-suggestion:hover {
+            border-color: var(--colorPrimary);
+            color: var(--colorPrimary);
+        }
+
+        .image-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .image-item {
+            display: flex;
+            align-items: center;
+            padding: 8px 12px;
+            border: 1px solid #d9d9d9;
+            border-radius: 6px;
+            gap: 12px;
+        }
+
+        .image-item.to-delete {
+            background-color: #fff2e8;
+            border-color: #ffbb96;
+        }
+
+        .image-preview {
+            width: 60px;
+            height: 60px;
+            object-fit: cover;
+            border-radius: 4px;
+            border: 1px solid #f0f0f0;
+        }
+
+        .image-name {
+            flex: 1;
+            font-size: 14px;
+            color: var(--colorText);
+        }
+
+        .image-actions {
+            display: flex;
+            gap: 8px;
+        }
+
+        .btn-sm {
+            padding: 0 8px;
+            height: 24px;
+            font-size: 12px;
+        }
+
+        .btn-danger {
+            color: #ff4d4f;
+            border-color: #ff4d4f;
+        }
+
+        .btn-danger:hover {
+            background-color: #ff4d4f;
+            color: #fff;
+        }
+
+        .help-text {
+            margin-top: 8px;
+            font-size: 12px;
+            color: var(--colorTextSecondary);
+            line-height: 1.5;
+        }
+
+        .export-code {
+            margin-top: 16px;
+            padding: 12px;
+            background-color: #fafafa;
+            border: 1px solid #d9d9d9;
+            border-radius: 6px;
+            font-family: 'Monaco', 'Menlo', 'Consolas', monospace;
+            font-size: 12px;
+            line-height: 1.6;
+            color: var(--colorText);
+            white-space: pre-wrap;
+            word-break: break-all;
+            max-height: 200px;
+            overflow-y: auto;
+        }
+    </style>
+
+
+</head>
+<body>
+    <!-- 导航栏 -->
+    <div class="navbar">
+        <div class="navbar-brand">Light Design</div>
+        <div class="navbar-actions">
+            <div class="save-mode-indicator" id="saveModeIndicator">
+                <span class="status-dot"></span>
+                <span id="saveModeText">本地模式</span>
+            </div>
+            <button class="btn" id="btnGithubSettings" title="配置 GitHub 仓库">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="12" cy="12" r="3"></circle>
+                    <path d="M12 1v6m0 6v6m-9-9h6m6 0h6"></path>
+                    <path d="M19.07 4.93l-4.24 4.24m0 5.66l4.24 4.24M4.93 4.93l4.24 4.24m0 5.66l-4.24 4.24"></path>
+                </svg>
+                GitHub 设置
+            </button>
+            <button class="btn" id="btnResetConfig" title="清除所有编辑，恢复默认配置">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="1 4 1 10 7 10"></polyline>
+                    <path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"></path>
+                </svg>
+                重置配置
+            </button>
+        </div>
+    </div>
+
+    <!-- 主容器 -->
+    <div class="container">
+        <!-- 左侧导航 -->
+        <div class="sidebar">
+            <!-- 搜索栏 -->
+            <div class="search-container">
+                <input type="text" class="search-input" id="searchInput" placeholder="搜索组件名称...">
+            </div>
+            <!-- 菜单容器 -->
+            <div class="menu-container" id="sidebar">
+                <!-- 导航内容将由JavaScript动态生成 -->
+            </div>
+        </div>
+
+        <!-- 右侧内容区 -->
+        <div class="content">
+            <div class="content-wrapper">
+                <!-- 规范卡片 -->
+                <div class="spec-card fade-in" id="specCard">
+                    <!-- 规范头部 -->
+                    <div class="spec-header">
+                        <div class="spec-title-row">
+                            <h1 class="spec-title" id="specTitle"></h1>
+                            <a href="#" class="spec-link-icon" id="specLinkIcon" title="查看详情" style="display: none;">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path>
+                                    <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path>
+                                </svg>
+                            </a>
+                            <div class="spec-tags" id="specTags"></div>
+                            <button class="spec-edit-icon" id="specEditIcon" title="编辑规范">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
+                                    <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
+                                </svg>
+                            </button>
+                        </div>
+                        <p class="spec-description" id="specDescription"></p>
+                    </div>
+                    <!-- 图片容器 -->
+                    <div class="image-container" id="imageContainer"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 编辑模态框 -->
+    <div class="modal-overlay" id="editModal">
+        <div class="modal">
+            <div class="modal-header">
+                <h2 class="modal-title">编辑规范</h2>
+                <button class="modal-close" id="modalClose">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <line x1="18" y1="6" x2="6" y2="18"></line>
+                        <line x1="6" y1="6" x2="18" y2="18"></line>
+                    </svg>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="editForm">
+                    <div class="form-group">
+                        <label class="form-label">标题</label>
+                        <input type="text" class="form-input" id="editTitle" placeholder="输入组件标题">
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">描述</label>
+                        <textarea class="form-textarea" id="editDescription" placeholder="输入组件描述"></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">链接</label>
+                        <input type="url" class="form-input" id="editLink" placeholder="https://example.com">
+                        <div class="help-text">输入组件详细规范的链接地址</div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">标签</label>
+                        <div class="tag-input-container" id="tagContainer">
+                            <!-- 标签将动态添加 -->
+                        </div>
+                        <div class="tag-suggestions">
+                            <span class="tag-suggestion" data-tag="未开发">+ 未开发</span>
+                            <span class="tag-suggestion" data-tag="模块">+ 模块</span>
+                            <span class="tag-suggestion" data-tag="公共">+ 公共</span>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">图片管理</label>
+                        <div class="image-list" id="imageList">
+                            <!-- 图片列表将动态生成 -->
+                        </div>
+                        <div class="help-text">
+                            标记删除的图片需要手动从文件夹中删除，然后运行"更新图片列表.command"
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="btn" id="btnCancel">取消</button>
+                <button class="btn" id="btnExport">备份配置</button>
+                <button class="btn btn-primary" id="btnSave">保存</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- GitHub 设置模态框 -->
+    <div class="modal-overlay" id="githubSettingsModal">
+        <div class="modal">
+            <div class="modal-header">
+                <h2 class="modal-title">GitHub 仓库设置</h2>
+                <button class="modal-close" id="githubSettingsModalClose">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <line x1="18" y1="6" x2="6" y2="18"></line>
+                        <line x1="6" y1="6" x2="18" y2="18"></line>
+                    </svg>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="githubSettingsForm">
+                    <div class="form-group">
+                        <label class="form-label">GitHub 用户名</label>
+                        <input type="text" class="form-input" id="githubUsername" placeholder="your-username">
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">仓库名称</label>
+                        <input type="text" class="form-input" id="githubRepo" placeholder="repository-name">
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">分支名称</label>
+                        <input type="text" class="form-input" id="githubBranch" placeholder="main" value="main">
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">文件路径</label>
+                        <input type="text" class="form-input" id="githubFilePath" placeholder="index.html" value="index.html">
+                        <div class="help-text">仓库中 index.html 的相对路径</div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Personal Access Token</label>
+                        <input type="password" class="form-input" id="githubToken" placeholder="ghp_xxxxxxxxxxxx">
+                        <div class="help-text">
+                            需要 <code>repo</code> 权限。<a href="https://github.com/settings/tokens/new" target="_blank" style="color: var(--colorPrimary);">创建 Token</a>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label" style="display: flex; align-items: center; gap: 8px;">
+                            <input type="checkbox" id="enableGithubMode" style="width: auto;">
+                            启用 GitHub 直接保存模式
+                        </label>
+                        <div class="help-text">启用后，编辑保存将直接提交到 GitHub 仓库</div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="btn" id="btnCancelGithubSettings">取消</button>
+                <button class="btn" id="btnTestGithubConnection">测试连接</button>
+                <button class="btn btn-primary" id="btnSaveGithubSettings">保存设置</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 导出配置模态框 -->
+    <div class="modal-overlay" id="exportModal">
+        <div class="modal">
+            <div class="modal-header">
+                <h2 class="modal-title">备份配置代码</h2>
+                <button class="modal-close" id="exportModalClose">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <line x1="18" y1="6" x2="6" y2="18"></line>
+                        <line x1="6" y1="6" x2="18" y2="18"></line>
+                    </svg>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p style="margin-bottom: 16px; color: var(--colorTextSecondary); font-size: 14px;">
+                    复制以下代码用于备份或分享配置。如需永久保存，可替换 index.html 中的 componentMetadata 对象：
+                </p>
+                <div class="export-code" id="exportCode"></div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn" id="btnCloseExport">关闭</button>
+                <button class="btn btn-primary" id="btnCopyCode">复制代码</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 图片文件列表（自动生成，请勿手动修改）
+        const imageFiles = [
+            '【交互】导入按钮.png',
+            '【交互】导航.png',
+            '【基础】快捷排序气泡 SortPopover.png',
+            '【基础】文本域 TextArea.png',
+            '【基础】气泡确认 Popconfirm.png',
+            '【基础】紧凑详情 Compact Details.png',
+            '【布局】导航栏.png',
+            '【布局】标签页 Tabs.png'
+        ];
+
+        // 组件元数据配置（可选）
+        let componentMetadata = {
+            // 示例：为组件添加描述、标签、链接
+            // '气泡确认 Popconfirm': {
+            //     description: '点击元素，弹出气泡式的确认框',
+            //     tags: ['模块', '未开发'],
+            //     link: 'https://example.com/popconfirm'
+            // }
+        };
+
+        // 从 localStorage 加载配置
+        function loadMetadataFromStorage() {
+            try {
+                const stored = localStorage.getItem('lightDesignMetadata');
+                if (stored) {
+                    const parsed = JSON.parse(stored);
+                    // 合并配置
+                    componentMetadata = { ...componentMetadata, ...parsed };
+                    console.log('✅ 已从本地存储加载配置');
+                }
+            } catch (e) {
+                console.error('加载配置失败:', e);
+            }
+        }
+
+        // 保存配置到 localStorage
+        function saveMetadataToStorage() {
+            try {
+                localStorage.setItem('lightDesignMetadata', JSON.stringify(componentMetadata));
+                console.log('✅ 配置已保存到本地存储');
+                return true;
+            } catch (e) {
+                console.error('保存配置失败:', e);
+                return false;
+            }
+        }
+
+        // 清除本地存储的配置
+        function clearMetadataStorage() {
+            try {
+                localStorage.removeItem('lightDesignMetadata');
+                console.log('✅ 已清除本地配置');
+                return true;
+            } catch (e) {
+                console.error('清除配置失败:', e);
+                return false;
+            }
+        }
+
+        // 初始化时加载配置
+        loadMetadataFromStorage();
+
+        // ============ GitHub 集成 ============
+        let githubSettings = {
+            enabled: false,
+            username: '',
+            repo: '',
+            branch: 'main',
+            filePath: 'index.html',
+            token: ''
+        };
+
+        // 加载 GitHub 设置
+        function loadGithubSettings() {
+            try {
+                const stored = localStorage.getItem('githubSettings');
+                if (stored) {
+                    githubSettings = { ...githubSettings, ...JSON.parse(stored) };
+                    console.log('✅ 已加载 GitHub 设置');
+                }
+            } catch (e) {
+                console.error('加载 GitHub 设置失败:', e);
+            }
+        }
+
+        // 保存 GitHub 设置
+        function saveGithubSettings() {
+            try {
+                localStorage.setItem('githubSettings', JSON.stringify(githubSettings));
+                console.log('✅ GitHub 设置已保存');
+                return true;
+            } catch (e) {
+                console.error('保存 GitHub 设置失败:', e);
+                return false;
+            }
+        }
+
+        // 通过 GitHub API 获取文件内容
+        async function getGithubFile() {
+            const url = `https://api.github.com/repos/${githubSettings.username}/${githubSettings.repo}/contents/${githubSettings.filePath}?ref=${githubSettings.branch}`;
+
+            const response = await fetch(url, {
+                headers: {
+                    'Authorization': `token ${githubSettings.token}`,
+                    'Accept': 'application/vnd.github.v3+json'
+                }
+            });
+
+            if (!response.ok) {
+                throw new Error(`GitHub API 错误: ${response.status} ${response.statusText}`);
+            }
+
+            return await response.json();
+        }
+
+        // Base64 转 UTF-8
+        function base64ToUtf8(base64Str) {
+            try {
+                // 去除可能的换行符
+                base64Str = base64Str.replace(/\s/g, '');
+                // Base64 解码为二进制字符串
+                const binary = atob(base64Str);
+                // 转换为 Uint8Array
+                const uint8Array = new Uint8Array(binary.length);
+                for (let i = 0; i < binary.length; i++) {
+                    uint8Array[i] = binary.charCodeAt(i);
+                }
+                // 使用 TextDecoder 正确解码 UTF-8
+                const decoder = new TextDecoder('utf-8');
+                return decoder.decode(uint8Array);
+            } catch (e) {
+                console.error('Base64 解码失败:', e);
+                // 降级方案：使用传统方法
+                return decodeURIComponent(escape(atob(base64Str)));
+            }
+        }
+
+        // 通过 GitHub API 更新文件
+        async function updateGithubFile(newMetadata) {
+            try {
+                // 1. 获取当前文件内容和 SHA
+                const fileData = await getGithubFile();
+                const currentContent = base64ToUtf8(fileData.content);
+
+                // 2. 替换 componentMetadata
+                const metadataCode = generateMetadataCode(newMetadata);
+                const pattern = /const componentMetadata = \{[^}]*\};/s;
+
+                let newContent;
+                if (pattern.test(currentContent)) {
+                    newContent = currentContent.replace(pattern, metadataCode);
+                } else {
+                    // 如果找不到，尝试更宽松的匹配
+                    const loosePattern = /let componentMetadata = \{[\s\S]*?\n\s*\};/;
+                    if (loosePattern.test(currentContent)) {
+                        newContent = currentContent.replace(loosePattern, metadataCode);
+                    } else {
+                        throw new Error('无法在文件中找到 componentMetadata 对象');
+                    }
+                }
+
+                // 3. 将内容转换为 Base64（正确处理 UTF-8）
+                function utf8ToBase64(str) {
+                    // 使用 TextEncoder 确保正确的 UTF-8 编码
+                    const encoder = new TextEncoder();
+                    const uint8Array = encoder.encode(str);
+                    // 转换为二进制字符串
+                    let binary = '';
+                    uint8Array.forEach(byte => {
+                        binary += String.fromCharCode(byte);
+                    });
+                    // Base64 编码
+                    return btoa(binary);
+                }
+
+                // 4. 提交更新
+                const url = `https://api.github.com/repos/${githubSettings.username}/${githubSettings.repo}/contents/${githubSettings.filePath}`;
+
+                const response = await fetch(url, {
+                    method: 'PUT',
+                    headers: {
+                        'Authorization': `token ${githubSettings.token}`,
+                        'Accept': 'application/vnd.github.v3+json',
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        message: `更新组件规范配置 - ${new Date().toLocaleString('zh-CN')}`,
+                        content: utf8ToBase64(newContent),
+                        sha: fileData.sha,
+                        branch: githubSettings.branch
+                    })
+                });
+
+                if (!response.ok) {
+                    const error = await response.json();
+                    throw new Error(`提交失败: ${error.message}`);
+                }
+
+                return await response.json();
+            } catch (error) {
+                console.error('GitHub 更新失败:', error);
+                throw error;
+            }
+        }
+
+        // 测试 GitHub 连接
+        async function testGithubConnection() {
+            try {
+                await getGithubFile();
+                return { success: true, message: '✅ 连接成功！可以访问仓库文件。' };
+            } catch (error) {
+                return { success: false, message: `❌ 连接失败: ${error.message}` };
+            }
+        }
+
+        // 生成配置代码（用于导出和 GitHub 提交）
+        function generateMetadataCode(metadata = componentMetadata) {
+            const entries = Object.entries(metadata)
+                .filter(([key, value]) => value && (value.description || value.tags || value.link))
+                .map(([key, value]) => {
+                    const props = [];
+                    if (value.description) {
+                        props.push(`        description: '${value.description.replace(/'/g, "\\'")}'`);
+                    }
+                    if (value.tags && value.tags.length > 0) {
+                        props.push(`        tags: [${value.tags.map(t => `'${t}'`).join(', ')}]`);
+                    }
+                    if (value.link) {
+                        props.push(`        link: '${value.link}'`);
+                    }
+                    return `    '${key}': {\n${props.join(',\n')}\n    }`;
+                });
+
+            return `const componentMetadata = {\n${entries.join(',\n')}\n};`;
+        }
+
+        // 更新保存模式指示器
+        function updateSaveModeIndicator() {
+            const indicator = document.getElementById('saveModeIndicator');
+            const text = document.getElementById('saveModeText');
+
+            if (githubSettings.enabled) {
+                indicator.classList.add('github-mode');
+                text.textContent = 'GitHub 模式';
+            } else {
+                indicator.classList.remove('github-mode');
+                text.textContent = '本地模式';
+            }
+        }
+
+        // 初始化 GitHub 设置
+        loadGithubSettings();
+        updateSaveModeIndicator();
+
+        // 分类排序顺序
+        const categoryOrder = ['布局', '基础', '交互'];
+
+        // 从文件名中提取分类和组件名称
+        function parseFileName(fileName) {
+            const match = fileName.match(/^【(.+?)】(.+?)(\.png|\.jpg|\.jpeg|\d+\.png|\d+\.jpg|\d+\.jpeg)$/i);
+            if (match) {
+                const name = match[2].trim();
+                const fullMatch = match[2].match(/^(.+?)(\d+)?$/);
+                const baseName = fullMatch ? fullMatch[1].trim() : name;
+                const sequenceNum = fullMatch && fullMatch[2] ? parseInt(fullMatch[2]) : null;
+
+                return {
+                    category: match[1],
+                    name: name,
+                    baseName: baseName,
+                    sequenceNum: sequenceNum,
+                    fileName: fileName
+                };
+            }
+            return null;
+        }
+
+        // 按分类和组件名称组织
+        const componentsByCategory = {};
+        const groupedComponents = new Map(); // 用于分组连续编号的图片
+
+        imageFiles.forEach(file => {
+            const parsed = parseFileName(file);
+            if (parsed) {
+                if (!componentsByCategory[parsed.category]) {
+                    componentsByCategory[parsed.category] = [];
+                }
+
+                // 查找是否已经有相同的baseName
+                let existingGroup = componentsByCategory[parsed.category].find(
+                    item => item.baseName === parsed.baseName
+                );
+
+                if (existingGroup) {
+                    // 添加到现有组
+                    existingGroup.images.push({
+                        fileName: parsed.fileName,
+                        sequenceNum: parsed.sequenceNum
+                    });
+                    // 按序号排序
+                    existingGroup.images.sort((a, b) => {
+                        if (a.sequenceNum === null) return -1;
+                        if (b.sequenceNum === null) return 1;
+                        return a.sequenceNum - b.sequenceNum;
+                    });
+                } else {
+                    // 创建新组
+                    componentsByCategory[parsed.category].push({
+                        category: parsed.category,
+                        name: parsed.name,
+                        baseName: parsed.baseName,
+                        images: [{
+                            fileName: parsed.fileName,
+                            sequenceNum: parsed.sequenceNum
+                        }]
+                    });
+                }
+            }
+        });
+
+        // 动态生成左侧导航
+        const sidebar = document.getElementById('sidebar');
+        const searchInput = document.getElementById('searchInput');
+
+        let allMenuItems = [];
+        let firstComponent = null;
+
+        function renderMenu(filteredItems = null) {
+            sidebar.innerHTML = '';
+
+            const menuRoot = document.createElement('ul');
+            menuRoot.className = 'ant-menu-root';
+            sidebar.appendChild(menuRoot);
+
+            const itemsToRender = filteredItems || allMenuItems;
+            const categoriesInView = new Set(itemsToRender.map(item => item.category));
+
+            // 按照自定义顺序排序分类
+            const sortedCategories = categoryOrder.filter(cat =>
+                componentsByCategory[cat] && categoriesInView.has(cat)
+            );
+
+            sortedCategories.forEach(category => {
+                const categoryComponents = itemsToRender.filter(item => item.category === category);
+
+                if (categoryComponents.length === 0) return;
+
+                // 创建分组标题
+                const groupTitle = document.createElement('li');
+                groupTitle.className = 'ant-menu-item-group-title';
+                groupTitle.textContent = category;
+                menuRoot.appendChild(groupTitle);
+
+                // 创建菜单项
+                categoryComponents.forEach(component => {
+                    const menuItem = document.createElement('li');
+                    menuItem.className = 'ant-menu-item';
+
+                    if (!firstComponent && !filteredItems) {
+                        menuItem.classList.add('ant-menu-item-selected');
+                        firstComponent = component;
+                    }
+
+                    menuItem.textContent = component.baseName;
+                    menuItem.dataset.componentData = JSON.stringify(component);
+                    menuRoot.appendChild(menuItem);
+                });
+            });
+        }
+
+        // 初始化所有菜单项
+        categoryOrder.forEach(category => {
+            if (componentsByCategory[category]) {
+                allMenuItems.push(...componentsByCategory[category]);
+            }
+        });
+
+        // 首次渲染
+        renderMenu();
+
+        // 获取DOM元素
+        const specCard = document.getElementById('specCard');
+        const specTitle = document.getElementById('specTitle');
+        const specDescription = document.getElementById('specDescription');
+        const specTags = document.getElementById('specTags');
+        const specLinkIcon = document.getElementById('specLinkIcon');
+        const imageContainer = document.getElementById('imageContainer');
+
+        // 显示组件详情
+        function showComponent(component) {
+            // 更新标题
+            const metadata = componentMetadata[component.baseName] || {};
+
+            if (metadata.link) {
+                specTitle.innerHTML = `<a href="${metadata.link}" target="_blank">${component.baseName}</a>`;
+                specLinkIcon.href = metadata.link;
+                specLinkIcon.style.display = 'inline-flex';
+            } else {
+                specTitle.textContent = component.baseName;
+                specLinkIcon.style.display = 'none';
+            }
+
+            // 更新描述
+            specDescription.textContent = metadata.description || '';
+            specDescription.style.display = metadata.description ? 'block' : 'none';
+
+            // 更新标签
+            specTags.innerHTML = '';
+            if (metadata.tags && metadata.tags.length > 0) {
+                metadata.tags.forEach(tag => {
+                    const tagElement = document.createElement('span');
+                    tagElement.className = 'spec-tag';
+
+                    // 根据标签类型添加不同的样式
+                    if (tag === '未开发') {
+                        tagElement.classList.add('tag-development');
+                    } else if (tag === '模块') {
+                        tagElement.classList.add('tag-module');
+                    } else if (tag === '公共') {
+                        tagElement.classList.add('tag-common');
+                    }
+
+                    tagElement.textContent = tag;
+                    specTags.appendChild(tagElement);
+                });
+            }
+
+            // 更新图片（支持多张图片）
+            imageContainer.innerHTML = '';
+            component.images.forEach(imgData => {
+                const img = document.createElement('img');
+                img.src = imgData.fileName;
+                img.alt = component.baseName;
+                img.className = 'component-image';
+                imageContainer.appendChild(img);
+            });
+        }
+
+        // 设置初始显示
+        if (firstComponent) {
+            showComponent(firstComponent);
+        }
+
+        // 搜索功能
+        searchInput.addEventListener('input', function(e) {
+            const searchTerm = e.target.value.trim().toLowerCase();
+
+            if (searchTerm === '') {
+                renderMenu();
+                return;
+            }
+
+            const filtered = allMenuItems.filter(item =>
+                item.baseName.toLowerCase().includes(searchTerm)
+            );
+
+            renderMenu(filtered);
+        });
+
+        // 事件委托：处理菜单点击
+        sidebar.addEventListener('click', function(e) {
+            const targetItem = e.target.closest('.ant-menu-item');
+
+            if (targetItem && targetItem.dataset.componentData) {
+                // 移除所有选中态
+                document.querySelectorAll('.ant-menu-item').forEach(item => {
+                    item.classList.remove('ant-menu-item-selected');
+                });
+
+                // 添加当前选中态
+                targetItem.classList.add('ant-menu-item-selected');
+
+                // 添加动画
+                specCard.classList.remove('fade-in');
+                void specCard.offsetWidth;
+                specCard.classList.add('fade-in');
+
+                // 显示组件
+                const component = JSON.parse(targetItem.dataset.componentData);
+                showComponent(component);
+
+                // 滚动内容区到顶部
+                document.querySelector('.content').scrollTo({
+                    top: 0,
+                    behavior: 'smooth'
+                });
+            }
+        });
+
+        // ============ 编辑功能 ============
+        let currentEditingComponent = null;
+        let currentTags = [];
+        let imagesToDelete = new Set();
+
+        const editModal = document.getElementById('editModal');
+        const exportModal = document.getElementById('exportModal');
+        const specEditIcon = document.getElementById('specEditIcon');
+        const modalClose = document.getElementById('modalClose');
+        const exportModalClose = document.getElementById('exportModalClose');
+        const btnCancel = document.getElementById('btnCancel');
+        const btnSave = document.getElementById('btnSave');
+        const btnExport = document.getElementById('btnExport');
+        const btnCloseExport = document.getElementById('btnCloseExport');
+        const btnCopyCode = document.getElementById('btnCopyCode');
+        const editTitle = document.getElementById('editTitle');
+        const editDescription = document.getElementById('editDescription');
+        const editLink = document.getElementById('editLink');
+        const tagContainer = document.getElementById('tagContainer');
+        const imageList = document.getElementById('imageList');
+        const exportCode = document.getElementById('exportCode');
+
+        // 打开编辑模态框
+        specEditIcon.addEventListener('click', function() {
+            // 获取当前选中的组件
+            const selectedMenuItem = document.querySelector('.ant-menu-item.ant-menu-item-selected');
+            if (!selectedMenuItem) return;
+
+            currentEditingComponent = JSON.parse(selectedMenuItem.dataset.componentData);
+            const metadata = componentMetadata[currentEditingComponent.baseName] || {};
+
+            // 填充表单
+            editTitle.value = currentEditingComponent.baseName;
+            editDescription.value = metadata.description || '';
+            editLink.value = metadata.link || '';
+            currentTags = metadata.tags ? [...metadata.tags] : [];
+            imagesToDelete.clear();
+
+            // 渲染标签
+            renderTags();
+
+            // 渲染图片列表
+            renderImageList();
+
+            // 显示模态框
+            editModal.classList.add('active');
+        });
+
+        // 关闭模态框
+        function closeEditModal() {
+            editModal.classList.remove('active');
+            currentEditingComponent = null;
+            currentTags = [];
+            imagesToDelete.clear();
+        }
+
+        modalClose.addEventListener('click', closeEditModal);
+        btnCancel.addEventListener('click', closeEditModal);
+
+        // 点击遮罩层关闭
+        editModal.addEventListener('click', function(e) {
+            if (e.target === editModal) {
+                closeEditModal();
+            }
+        });
+
+        // 渲染标签
+        function renderTags() {
+            tagContainer.innerHTML = '';
+            currentTags.forEach(tag => {
+                const tagItem = document.createElement('div');
+                tagItem.className = 'tag-item';
+                tagItem.innerHTML = `
+                    <span>${tag}</span>
+                    <span class="tag-item-remove" data-tag="${tag}">
+                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <line x1="18" y1="6" x2="6" y2="18"></line>
+                            <line x1="6" y1="6" x2="18" y2="18"></line>
+                        </svg>
+                    </span>
+                `;
+                tagContainer.appendChild(tagItem);
+            });
+        }
+
+        // 添加标签
+        document.querySelectorAll('.tag-suggestion').forEach(btn => {
+            btn.addEventListener('click', function() {
+                const tag = this.dataset.tag;
+                if (!currentTags.includes(tag)) {
+                    currentTags.push(tag);
+                    renderTags();
+                }
+            });
+        });
+
+        // 删除标签
+        tagContainer.addEventListener('click', function(e) {
+            const removeBtn = e.target.closest('.tag-item-remove');
+            if (removeBtn) {
+                const tag = removeBtn.dataset.tag;
+                currentTags = currentTags.filter(t => t !== tag);
+                renderTags();
+            }
+        });
+
+        // 渲染图片列表
+        function renderImageList() {
+            imageList.innerHTML = '';
+            currentEditingComponent.images.forEach(imgData => {
+                const isMarkedForDeletion = imagesToDelete.has(imgData.fileName);
+                const imageItem = document.createElement('div');
+                imageItem.className = 'image-item' + (isMarkedForDeletion ? ' to-delete' : '');
+                imageItem.innerHTML = `
+                    <img src="${imgData.fileName}" class="image-preview" alt="">
+                    <span class="image-name">${imgData.fileName}</span>
+                    <div class="image-actions">
+                        <button type="button" class="btn btn-sm ${isMarkedForDeletion ? '' : 'btn-danger'}" data-action="${isMarkedForDeletion ? 'restore' : 'delete'}" data-file="${imgData.fileName}">
+                            ${isMarkedForDeletion ? '恢复' : '删除'}
+                        </button>
+                    </div>
+                `;
+                imageList.appendChild(imageItem);
+            });
+        }
+
+        // 图片操作
+        imageList.addEventListener('click', function(e) {
+            const btn = e.target.closest('[data-action]');
+            if (!btn) return;
+
+            const fileName = btn.dataset.file;
+            const action = btn.dataset.action;
+
+            if (action === 'delete') {
+                imagesToDelete.add(fileName);
+            } else if (action === 'restore') {
+                imagesToDelete.delete(fileName);
+            }
+
+            renderImageList();
+        });
+
+        // 保存编辑
+        btnSave.addEventListener('click', async function() {
+            if (!currentEditingComponent) return;
+
+            const baseName = currentEditingComponent.baseName;
+            const newDescription = editDescription.value.trim();
+            const newLink = editLink.value.trim();
+
+            // 更新 componentMetadata
+            if (newDescription || newLink || currentTags.length > 0) {
+                componentMetadata[baseName] = {
+                    description: newDescription || undefined,
+                    tags: currentTags.length > 0 ? currentTags : undefined,
+                    link: newLink || undefined
+                };
+                // 清理 undefined 值
+                Object.keys(componentMetadata[baseName]).forEach(key => {
+                    if (componentMetadata[baseName][key] === undefined) {
+                        delete componentMetadata[baseName][key];
+                    }
+                });
+            } else {
+                delete componentMetadata[baseName];
+            }
+
+            // 根据模式保存
+            let saved = false;
+            let message = '';
+
+            if (githubSettings.enabled) {
+                // GitHub 模式
+                btnSave.disabled = true;
+                btnSave.textContent = '提交中...';
+
+                try {
+                    await updateGithubFile(componentMetadata);
+                    saved = true;
+                    message = '✅ 配置已提交到 GitHub 仓库！\n\n页面将在 3 秒后自动刷新以加载最新内容。';
+                } catch (error) {
+                    message = `❌ GitHub 提交失败: ${error.message}\n\n配置已保存到本地浏览器。`;
+                    // 失败时保存到 localStorage
+                    saveMetadataToStorage();
+                } finally {
+                    btnSave.disabled = false;
+                    btnSave.textContent = '保存';
+                }
+            } else {
+                // 本地模式
+                saved = saveMetadataToStorage();
+                message = '✅ 配置已保存并立即生效！';
+            }
+
+            // 重新显示当前组件
+            showComponent(currentEditingComponent);
+
+            // 关闭模态框
+            closeEditModal();
+
+            // 显示提示
+            if (imagesToDelete.size > 0) {
+                const fileList = Array.from(imagesToDelete).join('\n  • ');
+                message += '\n\n📋 请手动删除以下图片文件：\n  • ' + fileList + '\n\n删除后运行"更新图片列表.command"刷新显示。';
+            }
+
+            if (!githubSettings.enabled && saved) {
+                message += '\n\n💡 提示：配置已自动保存到浏览器，下次打开会自动加载。如需备份或分享配置，可点击"备份配置"按钮。';
+            }
+
+            alert(message);
+
+            // GitHub 模式成功后刷新页面
+            if (githubSettings.enabled && saved) {
+                setTimeout(() => {
+                    location.reload();
+                }, 3000);
+            }
+        });
+
+        // 导出配置
+        btnExport.addEventListener('click', function() {
+            // 生成配置代码
+            const metadataCode = generateMetadataCode();
+            exportCode.textContent = metadataCode;
+
+            // 显示导出模态框
+            exportModal.classList.add('active');
+        });
+
+        // 关闭导出模态框
+        function closeExportModal() {
+            exportModal.classList.remove('active');
+        }
+
+        exportModalClose.addEventListener('click', closeExportModal);
+        btnCloseExport.addEventListener('click', closeExportModal);
+
+        exportModal.addEventListener('click', function(e) {
+            if (e.target === exportModal) {
+                closeExportModal();
+            }
+        });
+
+        // 复制代码
+        btnCopyCode.addEventListener('click', function() {
+            const code = exportCode.textContent;
+            navigator.clipboard.writeText(code).then(() => {
+                alert('配置代码已复制到剪贴板！');
+            }).catch(err => {
+                // 降级方案
+                const textarea = document.createElement('textarea');
+                textarea.value = code;
+                textarea.style.position = 'fixed';
+                textarea.style.opacity = '0';
+                document.body.appendChild(textarea);
+                textarea.select();
+                document.execCommand('copy');
+                document.body.removeChild(textarea);
+                alert('配置代码已复制到剪贴板！');
+            });
+        });
+
+        // 重置配置
+        const btnResetConfig = document.getElementById('btnResetConfig');
+        btnResetConfig.addEventListener('click', function() {
+            if (!confirm('确定要清除所有编辑的配置吗？\n\n此操作将恢复默认配置，无法撤销！')) {
+                return;
+            }
+
+            // 清除 localStorage
+            if (clearMetadataStorage()) {
+                // 重新加载页面
+                alert('✅ 配置已重置！页面将重新加载。');
+                location.reload();
+            } else {
+                alert('❌ 重置失败，请检查浏览器设置。');
+            }
+        });
+
+        // ============ GitHub 设置模态框 ============
+        const githubSettingsModal = document.getElementById('githubSettingsModal');
+        const btnGithubSettings = document.getElementById('btnGithubSettings');
+        const githubSettingsModalClose = document.getElementById('githubSettingsModalClose');
+        const btnCancelGithubSettings = document.getElementById('btnCancelGithubSettings');
+        const btnSaveGithubSettings = document.getElementById('btnSaveGithubSettings');
+        const btnTestGithubConnection = document.getElementById('btnTestGithubConnection');
+
+        const githubUsername = document.getElementById('githubUsername');
+        const githubRepo = document.getElementById('githubRepo');
+        const githubBranch = document.getElementById('githubBranch');
+        const githubFilePath = document.getElementById('githubFilePath');
+        const githubToken = document.getElementById('githubToken');
+        const enableGithubMode = document.getElementById('enableGithubMode');
+
+        // 打开 GitHub 设置
+        btnGithubSettings.addEventListener('click', function() {
+            // 填充表单
+            githubUsername.value = githubSettings.username;
+            githubRepo.value = githubSettings.repo;
+            githubBranch.value = githubSettings.branch;
+            githubFilePath.value = githubSettings.filePath;
+            githubToken.value = githubSettings.token;
+            enableGithubMode.checked = githubSettings.enabled;
+
+            // 显示模态框
+            githubSettingsModal.classList.add('active');
+        });
+
+        // 关闭 GitHub 设置
+        function closeGithubSettingsModal() {
+            githubSettingsModal.classList.remove('active');
+        }
+
+        githubSettingsModalClose.addEventListener('click', closeGithubSettingsModal);
+        btnCancelGithubSettings.addEventListener('click', closeGithubSettingsModal);
+
+        githubSettingsModal.addEventListener('click', function(e) {
+            if (e.target === githubSettingsModal) {
+                closeGithubSettingsModal();
+            }
+        });
+
+        // 测试连接
+        btnTestGithubConnection.addEventListener('click', async function() {
+            // 临时更新设置
+            const tempSettings = {
+                username: githubUsername.value.trim(),
+                repo: githubRepo.value.trim(),
+                branch: githubBranch.value.trim() || 'main',
+                filePath: githubFilePath.value.trim() || 'index.html',
+                token: githubToken.value.trim()
+            };
+
+            if (!tempSettings.username || !tempSettings.repo || !tempSettings.token) {
+                alert('❌ 请填写完整的 GitHub 配置信息！');
+                return;
+            }
+
+            // 临时保存到 githubSettings
+            const originalSettings = { ...githubSettings };
+            Object.assign(githubSettings, tempSettings);
+
+            btnTestGithubConnection.disabled = true;
+            btnTestGithubConnection.textContent = '测试中...';
+
+            try {
+                const result = await testGithubConnection();
+                alert(result.message);
+            } catch (error) {
+                alert(`❌ 测试失败: ${error.message}`);
+            } finally {
+                // 恢复原设置
+                Object.assign(githubSettings, originalSettings);
+                btnTestGithubConnection.disabled = false;
+                btnTestGithubConnection.textContent = '测试连接';
+            }
+        });
+
+        // 保存 GitHub 设置
+        btnSaveGithubSettings.addEventListener('click', function() {
+            const username = githubUsername.value.trim();
+            const repo = githubRepo.value.trim();
+            const branch = githubBranch.value.trim() || 'main';
+            const filePath = githubFilePath.value.trim() || 'index.html';
+            const token = githubToken.value.trim();
+            const enabled = enableGithubMode.checked;
+
+            if (enabled && (!username || !repo || !token)) {
+                alert('❌ 启用 GitHub 模式需要填写完整的配置信息！');
+                return;
+            }
+
+            // 更新设置
+            githubSettings = {
+                enabled,
+                username,
+                repo,
+                branch,
+                filePath,
+                token
+            };
+
+            // 保存到 localStorage
+            if (saveGithubSettings()) {
+                updateSaveModeIndicator();
+                closeGithubSettingsModal();
+                alert('✅ GitHub 设置已保存！');
+            } else {
+                alert('❌ 保存失败，请检查浏览器设置。');
+            }
+        });
+
+    </script>
+</body>
+</html>
