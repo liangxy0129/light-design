@@ -1020,19 +1020,28 @@
 
                 // 2. 替换 componentMetadata
                 const metadataCode = generateMetadataCode(newMetadata);
-                const pattern = /const componentMetadata = \{[^}]*\};/s;
 
-                let newContent;
-                if (pattern.test(currentContent)) {
-                    newContent = currentContent.replace(pattern, metadataCode);
-                } else {
-                    // 如果找不到，尝试更宽松的匹配
-                    const loosePattern = /let componentMetadata = \{[\s\S]*?\n\s*\};/;
-                    if (loosePattern.test(currentContent)) {
-                        newContent = currentContent.replace(loosePattern, metadataCode);
-                    } else {
-                        throw new Error('无法在文件中找到 componentMetadata 对象');
+                // 使用更强大的正则表达式来匹配 componentMetadata 对象
+                // 匹配从声明开始到对应的结束大括号和分号
+                const patterns = [
+                    // 匹配 let componentMetadata = { ... };
+                    /let\s+componentMetadata\s*=\s*\{[\s\S]*?\n\s*\};/,
+                    // 匹配 const componentMetadata = { ... };
+                    /const\s+componentMetadata\s*=\s*\{[\s\S]*?\n\s*\};/,
+                    // 更宽松的匹配：从 componentMetadata 开始到下一个顶层语句
+                    /(let|const)\s+componentMetadata\s*=\s*\{[^]*?\};(?=\s*(?:\/\/|let|const|var|function|$))/
+                ];
+
+                let newContent = null;
+                for (const pattern of patterns) {
+                    if (pattern.test(currentContent)) {
+                        newContent = currentContent.replace(pattern, metadataCode);
+                        break;
                     }
+                }
+
+                if (!newContent) {
+                    throw new Error('无法在文件中找到 componentMetadata 对象');
                 }
 
                 // 3. 将内容转换为 Base64（正确处理 UTF-8）
