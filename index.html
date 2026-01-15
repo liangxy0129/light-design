@@ -887,14 +887,12 @@
         ];
 
         // 组件元数据配置（可选）
-        let componentMetadata = {
-            // 示例：为组件添加描述、标签、链接
-            // '气泡确认 Popconfirm': {
-            //     description: '点击元素，弹出气泡式的确认框',
-            //     tags: ['模块', '未开发'],
-            //     link: 'https://example.com/popconfirm'
-            // }
-        };
+        const componentMetadata = {
+    '快捷排序气泡 SortPopover': {
+        description: '用于在列表中快速改变单条数据项的位置（例如：调整顺序、排序优先级）。',
+        tags: ['模块']
+    }
+};
 
         // 从 localStorage 加载配置
         function loadMetadataFromStorage() {
