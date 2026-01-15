@@ -264,16 +264,25 @@
             display: inline-flex;
             align-items: center;
             justify-content: center;
-            width: 20px;
-            height: 20px;
+            width: 18px;
+            height: 18px;
             color: var(--colorTextSecondary);
             cursor: pointer;
-            transition: color 0.3s;
-            margin-left: auto;
+            transition: all 0.3s;
+            margin-left: 8px;
+            background: none;
+            border: none;
+            padding: 0;
+            outline: none;
         }
 
         .spec-edit-icon:hover {
             color: var(--colorPrimary);
+            background: none;
+        }
+
+        .spec-edit-icon:focus {
+            outline: none;
         }
 
         .spec-tags {
@@ -296,21 +305,33 @@
         }
 
         .spec-tag.tag-development {
-            background-color: #fff7e6;
-            border-color: #ffd591;
-            color: #d46b08;
+            background-color: #f5f5f5;
+            border-color: #d9d9d9;
+            color: #595959;
+        }
+
+        .spec-tag.tag-developing {
+            background-color: #e6f7ff;
+            border-color: #91d5ff;
+            color: #1890ff;
+        }
+
+        .spec-tag.tag-developed {
+            background-color: #f6ffed;
+            border-color: #95de64;
+            color: #52c41a;
         }
 
         .spec-tag.tag-module {
-            background-color: #e6f4ff;
-            border-color: #91caff;
-            color: #0958d9;
+            background-color: #fff0f6;
+            border-color: #ffadd2;
+            color: #eb2f96;
         }
 
         .spec-tag.tag-common {
-            background-color: #f6ffed;
-            border-color: #b7eb8f;
-            color: #389e0d;
+            background-color: #e6fffb;
+            border-color: #87e8de;
+            color: #13c2c2;
         }
 
         .spec-description {
@@ -659,11 +680,11 @@
     <div class="navbar">
         <div class="navbar-brand">Light Design</div>
         <div class="navbar-actions">
-            <div class="save-mode-indicator" id="saveModeIndicator">
+            <div class="save-mode-indicator" id="saveModeIndicator" style="display: none;">
                 <span class="status-dot"></span>
                 <span id="saveModeText">本地模式</span>
             </div>
-            <button class="btn" id="btnGithubSettings" title="配置 GitHub 仓库">
+            <button class="btn" id="btnGithubSettings" title="配置 GitHub 仓库" style="display: none;">
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                     <circle cx="12" cy="12" r="3"></circle>
                     <path d="M12 1v6m0 6v6m-9-9h6m6 0h6"></path>
@@ -671,7 +692,7 @@
                 </svg>
                 GitHub 设置
             </button>
-            <button class="btn" id="btnResetConfig" title="清除所有编辑，恢复默认配置">
+            <button class="btn" id="btnResetConfig" title="清除所有编辑，恢复默认配置" style="display: none;">
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                     <polyline points="1 4 1 10 7 10"></polyline>
                     <path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"></path>
@@ -704,6 +725,11 @@
                     <div class="spec-header">
                         <div class="spec-title-row">
                             <h1 class="spec-title" id="specTitle"></h1>
+                            <button class="spec-edit-icon" id="specEditIcon" title="编辑规范">
+                                <svg width="16" height="16" viewBox="64 64 896 896" fill="currentColor">
+                                    <path d="M257.7 752c2 0 4-.2 6-.5L431.9 722c2-.4 3.9-1.3 5.3-2.8l423.9-423.9a9.96 9.96 0 000-14.1L694.9 114.9c-1.9-1.9-4.4-2.9-7.1-2.9s-5.2 1-7.1 2.9L256.8 538.8c-1.5 1.5-2.4 3.3-2.8 5.3l-29.5 168.2a33.5 33.5 0 009.4 29.8c6.6 6.4 14.9 9.9 23.8 9.9zm67.4-174.4L687.8 215l73.3 73.3-362.7 362.6-88.9 15.7 15.6-89zM880 836H144c-17.7 0-32 14.3-32 32v36c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-36c0-17.7-14.3-32-32-32z"></path>
+                                </svg>
+                            </button>
                             <a href="#" class="spec-link-icon" id="specLinkIcon" title="查看详情" style="display: none;">
                                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                                     <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path>
@@ -711,12 +737,6 @@
                                 </svg>
                             </a>
                             <div class="spec-tags" id="specTags"></div>
-                            <button class="spec-edit-icon" id="specEditIcon" title="编辑规范">
-                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                    <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
-                                    <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
-                                </svg>
-                            </button>
                         </div>
                         <p class="spec-description" id="specDescription"></p>
                     </div>
@@ -764,6 +784,8 @@
                         </div>
                         <div class="tag-suggestions">
                             <span class="tag-suggestion" data-tag="未开发">+ 未开发</span>
+                            <span class="tag-suggestion" data-tag="开发中">+ 开发中</span>
+                            <span class="tag-suggestion" data-tag="已开发">+ 已开发</span>
                             <span class="tag-suggestion" data-tag="模块">+ 模块</span>
                             <span class="tag-suggestion" data-tag="公共">+ 公共</span>
                         </div>
@@ -876,21 +898,41 @@
     <script>
         // 图片文件列表（自动生成，请勿手动修改）
         const imageFiles = [
-            'standard-pic/【基础】文本域 TextArea.png',
-            'standard-pic/【布局与导航】导航栏 icon 交互.png',
-            'standard-pic/【布局与导航】导航栏.png',
-            'standard-pic/【布局与导航】标签页 Tabs.png',
-            'standard-pic/【浮层与反馈】导入规范 1.png',
-            'standard-pic/【浮层与反馈】导入规范 2.png',
-            'standard-pic/【浮层与反馈】气泡确认 Popconfirm.png',
-            'standard-pic/【表单与数据】IP 输入规范.png',
-            'standard-pic/【表单与数据】列表筛选.png',
-            'standard-pic/【表单与数据】列表规范 1.png',
-            'standard-pic/【表单与数据】列表规范 2.png',
-            'standard-pic/【表单与数据】快捷排序气泡 SortPopover.png',
-            'standard-pic/【表单与数据】更多筛选规范.png',
-            'standard-pic/【表单与数据】紧凑详情 Compact Details.png',
-            'standard-pic/【表单与数据】表头筛选规范.png'
+            'standard-pic/1基础/品牌色 Brand Color.png',
+            'standard-pic/1基础/按钮 Button.png',
+            'standard-pic/1基础/空数据.png',
+            'standard-pic/1基础/辅助色 Accent Color.png',
+            'standard-pic/2 布局与导航/导航栏 icon 交互.png',
+            'standard-pic/2 布局与导航/导航栏.png',
+            'standard-pic/2 布局与导航/标签页 Tabs.png',
+            'standard-pic/3表单与数据/IP 输入规范.png',
+            'standard-pic/3表单与数据/侧边栏抽屉弹窗交互.png',
+            'standard-pic/3表单与数据/列表筛选-1.png',
+            'standard-pic/3表单与数据/列表筛选-2.png',
+            'standard-pic/3表单与数据/列表规范-1.png',
+            'standard-pic/3表单与数据/列表规范-2.png',
+            'standard-pic/3表单与数据/单选框 Radio.png',
+            'standard-pic/3表单与数据/后置标签输入框.png',
+            'standard-pic/3表单与数据/多选框 Checkbox.png',
+            'standard-pic/3表单与数据/开关 Switch.png',
+            'standard-pic/3表单与数据/彩色标签 Colorful Tags.png',
+            'standard-pic/3表单与数据/快捷排序气泡 SortPopover.png',
+            'standard-pic/3表单与数据/文本域 TextArea.png',
+            'standard-pic/3表单与数据/紧凑详情 Compact Details.png',
+            'standard-pic/3表单与数据/脱敏信息展示.png',
+            'standard-pic/3表单与数据/表头筛选规范.png',
+            'standard-pic/4浮层与反馈/导入规范-1.png',
+            'standard-pic/4浮层与反馈/导入规范-2.png',
+            'standard-pic/4浮层与反馈/文字提示Tooltip.png',
+            'standard-pic/4浮层与反馈/气泡确认 Popconfirm.png',
+            'standard-pic/5报表/吞吐报表 Thoughput Chart-1.png',
+            'standard-pic/5报表/吞吐报表 Thoughput Chart-2.png',
+            'standard-pic/5报表/吞吐报表 Thoughput Chart-3.png',
+            'standard-pic/5报表/吞吐报表 Thoughput Chart-4.png',
+            'standard-pic/5报表/吞吐报表 Thoughput Chart-5.png',
+            'standard-pic/5报表/图表颜色-1.png',
+            'standard-pic/5报表/图表颜色-2.png',
+            'standard-pic/5报表/饼状图.png'
         ];
 
         // 组件元数据配置（可选）
@@ -1148,30 +1190,49 @@
         loadGithubSettings();
         updateSaveModeIndicator();
 
-        // 分类排序顺序
-        const categoryOrder = ['布局与导航', '表单与数据', '浮层与反馈', '基础'];
-
-        // 从文件名中提取分类和组件名称
+        // 从文件路径中提取分类和组件名称
+        // 新格式：standard-pic/1基础/文本域 TextArea.png
         function parseFileName(fileName) {
-            // 去掉路径前缀（如 standard-pic/），只保留文件名部分用于解析
-            const fileNameOnly = fileName.split('/').pop();
+            const parts = fileName.split('/');
+            if (parts.length < 3) return null;
 
-            const match = fileNameOnly.match(/^【(.+?)】(.+?)(\.png|\.jpg|\.jpeg|\d+\.png|\d+\.jpg|\d+\.jpeg)$/i);
-            if (match) {
-                const name = match[2].trim();
-                const fullMatch = match[2].match(/^(.+?)(\d+)?$/);
-                const baseName = fullMatch ? fullMatch[1].trim() : name;
-                const sequenceNum = fullMatch && fullMatch[2] ? parseInt(fullMatch[2]) : null;
+            const categoryFolder = parts[1]; // "1基础" 或 "2 布局与导航"
+            const fileNameOnly = parts[2];   // "文本域 TextArea.png"
 
-                return {
-                    category: match[1],
-                    name: name,
-                    baseName: baseName,
-                    sequenceNum: sequenceNum,
-                    fileName: fileName  // 保留完整路径用于图片加载
-                };
+            // 从文件夹名中提取排序数字和分类名
+            // 匹配格式：数字 + 可选空格 + 分类名
+            const categoryMatch = categoryFolder.match(/^(\d+)\s*(.+)$/);
+            if (!categoryMatch) return null;
+
+            const categoryOrder = parseInt(categoryMatch[1]);
+            const categoryName = categoryMatch[2].trim();
+
+            // 从文件名中提取组件名（去除扩展名）
+            const nameMatch = fileNameOnly.match(/^(.+)(\.png|\.jpg|\.jpeg)$/i);
+            if (!nameMatch) return null;
+
+            const name = nameMatch[1].trim();
+
+            // 尝试匹配结尾的连字符或空格+数字
+            const seqMatch = name.match(/^(.+?)[-\s]+(\d+)$/);
+            let baseName, sequenceNum;
+            if (seqMatch) {
+                baseName = seqMatch[1].trim();
+                sequenceNum = parseInt(seqMatch[2]);
+            } else {
+                baseName = name;
+                sequenceNum = null;
             }
-            return null;
+
+            return {
+                category: categoryName,      // "基础"
+                categoryFolder: categoryFolder, // "1基础"
+                categoryOrder: categoryOrder,   // 1
+                name: name,                     // "文本域 TextArea"
+                baseName: baseName,             // "文本域 TextArea"
+                sequenceNum: sequenceNum,       // null
+                fileName: fileName              // 完整路径
+            };
         }
 
         // 按分类和组件名称组织
@@ -1232,12 +1293,19 @@
             sidebar.appendChild(menuRoot);
 
             const itemsToRender = filteredItems || allMenuItems;
-            const categoriesInView = new Set(itemsToRender.map(item => item.category));
 
-            // 按照自定义顺序排序分类
-            const sortedCategories = categoryOrder.filter(cat =>
-                componentsByCategory[cat] && categoriesInView.has(cat)
-            );
+            // 提取所有分类并按 categoryOrder 数字排序
+            const categoryMap = new Map(); // category name -> categoryOrder number
+            itemsToRender.forEach(item => {
+                if (!categoryMap.has(item.category)) {
+                    categoryMap.set(item.category, item.categoryOrder);
+                }
+            });
+
+            // 按照数字排序分类
+            const sortedCategories = Array.from(categoryMap.entries())
+                .sort((a, b) => a[1] - b[1])  // 按 categoryOrder 数字排序
+                .map(entry => entry[0]);      // 只保留分类名
 
             sortedCategories.forEach(category => {
                 const categoryComponents = itemsToRender.filter(item => item.category === category);
@@ -1267,8 +1335,17 @@
             });
         }
 
-        // 初始化所有菜单项
-        categoryOrder.forEach(category => {
+        // 初始化所有菜单项（按分类排序）
+        const allCategories = Object.keys(componentsByCategory);
+        const sortedCategoryList = allCategories
+            .map(cat => ({
+                name: cat,
+                order: componentsByCategory[cat][0]?.categoryOrder || 999
+            }))
+            .sort((a, b) => a.order - b.order)
+            .map(item => item.name);
+
+        sortedCategoryList.forEach(category => {
             if (componentsByCategory[category]) {
                 allMenuItems.push(...componentsByCategory[category]);
             }
@@ -1313,6 +1390,10 @@
                     // 根据标签类型添加不同的样式
                     if (tag === '未开发') {
                         tagElement.classList.add('tag-development');
+                    } else if (tag === '开发中') {
+                        tagElement.classList.add('tag-developing');
+                    } else if (tag === '已开发') {
+                        tagElement.classList.add('tag-developed');
                     } else if (tag === '模块') {
                         tagElement.classList.add('tag-module');
                     } else if (tag === '公共') {

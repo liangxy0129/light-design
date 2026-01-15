@@ -17,12 +17,18 @@ image_dir = script_dir / 'standard-pic'
 
 # 获取所有图片文件
 image_extensions = ('.png', '.jpg', '.jpeg')
+image_files = []
+
 if image_dir.exists():
-    # 如果 standard-pic 文件夹存在，从该文件夹扫描
-    image_files = sorted([
-        f'standard-pic/{f.name}' for f in image_dir.iterdir()
-        if f.is_file() and f.suffix.lower() in image_extensions
-    ])
+    # 扫描 standard-pic 下的所有子文件夹
+    for category_dir in sorted(image_dir.iterdir()):
+        if category_dir.is_dir() and not category_dir.name.startswith('.'):
+            # 扫描该分类文件夹下的所有图片
+            for img_file in sorted(category_dir.iterdir()):
+                if img_file.is_file() and img_file.suffix.lower() in image_extensions:
+                    # 生成相对路径：standard-pic/1基础/文件.png
+                    relative_path = f'standard-pic/{category_dir.name}/{img_file.name}'
+                    image_files.append(relative_path)
 else:
     # 兼容旧版本，从根目录扫描
     image_files = sorted([
