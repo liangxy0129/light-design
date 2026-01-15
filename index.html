@@ -1135,7 +1135,10 @@
 
         // 从文件名中提取分类和组件名称
         function parseFileName(fileName) {
-            const match = fileName.match(/^【(.+?)】(.+?)(\.png|\.jpg|\.jpeg|\d+\.png|\d+\.jpg|\d+\.jpeg)$/i);
+            // 去掉路径前缀（如 standard-pic/），只保留文件名部分用于解析
+            const fileNameOnly = fileName.split('/').pop();
+
+            const match = fileNameOnly.match(/^【(.+?)】(.+?)(\.png|\.jpg|\.jpeg|\d+\.png|\d+\.jpg|\d+\.jpeg)$/i);
             if (match) {
                 const name = match[2].trim();
                 const fullMatch = match[2].match(/^(.+?)(\d+)?$/);
@@ -1147,7 +1150,7 @@
                     name: name,
                     baseName: baseName,
                     sequenceNum: sequenceNum,
-                    fileName: fileName
+                    fileName: fileName  // 保留完整路径用于图片加载
                 };
             }
             return null;
