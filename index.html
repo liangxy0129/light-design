@@ -937,37 +937,111 @@
 
         // 组件元数据配置（可选）
         let componentMetadata = {
-    '品牌色 Brand Color': {
-        tags: ['开发中', '公共']
-    },
-    '按钮 Button': {
-        tags: ['已开发', '公共']
-    },
-    '空数据': {
-        tags: ['已开发', '公共']
-    },
-    '辅助色 Accent Color': {
-        tags: ['开发中', '公共']
-    },
-    '导航栏 icon 交互': {
-        tags: ['开发中', '模块']
-    },
-    '导航栏': {
-        tags: ['已开发', '公共']
-    },
-    '标签页 Tabs': {
-        tags: ['未开发']
-    },
     '快捷排序气泡 SortPopover': {
         description: '用于在列表中快速改变单条数据项的位置（例如：调整顺序、排序优先级）。',
-        tags: ['模块']
+        tags: ['模块', '已开发'],
+        link: 'http://172.16.132.136:8088/public/design_standards/%E5%BF%AB%E6%8D%B7%E6%8E%92%E5%BA%8F%E6%B0%94%E6%B3%A1%20SortPopover/index.html'
     },
     '导航': {
         description: '全局导航规范',
         link: 'http://172.16.132.136:8088/public/design_standards/%E5%85%A8%E5%B1%80%E5%AF%BC%E8%88%AA%E8%A7%84%E8%8C%83/index.html'
     },
+    '文本域 TextArea': {
+        description: '用于多行文本输入',
+        tags: ['未开发', '公共'],
+        link: 'http://172.16.132.136:8088/public/design_standards/%E6%96%87%E6%9C%AC%E5%9F%9F%20TextArea/index.html'
+    },
+    '气泡确认 Popconfirm': {
+        description: 'Popconfirm 是一种轻量级的确认交互控件，点击元素，弹出气泡式的确认框。\n用于在用户执行高风险或不可逆操作前，通过浮层气泡形式进行二次确认，避免误操作。与全屏模态弹窗相比，其交互更轻、侵入性更低，保持操作上下文不中断。',
+        tags: ['已开发', '公共'],
+        link: 'http://172.16.132.136:8088/public/design_standards/%E6%B0%94%E6%B3%A1%E7%A1%AE%E8%AE%A4%20Popconfirm/index.html'
+    },
+    '导航栏': {
+        description: '收纳和排列网站架构，为页面提供内容和功能的导航。',
+        tags: ['已开发', '公共'],
+        link: 'http://172.16.132.136:8088/public/design_standards/%E5%AF%BC%E8%88%AA0809/index.html'
+    },
+    '紧凑详情 Compact Details': {
+        description: '在空间有限（侧栏、弹窗、卡片详情）场景下，以紧凑、可扫描、双语友好的方式展示属性信息。',
+        tags: ['未开发', '公共'],
+        link: 'http://172.16.132.136:8088/public/design_standards/%E7%B4%A7%E5%87%91%E8%AF%A6%E6%83%85%20Compact%20Details/index.html'
+    },
+    '标签页 Tabs': {
+        description: '标签页用于在同一页面区域切换不同内容。一次只显示一个标签内容，常用于数据/功能分组切换。',
+        tags: ['未开发'],
+        link: 'http://172.16.132.136:8088/public/design_standards/%E6%A0%87%E7%AD%BE%E9%A1%B5%20Tabs%20%E8%A7%84%E8%8C%83/index.html'
+    },
+    '品牌色 Brand Color': {
+        tags: ['开发中', '公共'],
+        link: 'http://172.16.132.136:8088/public/design_standards/Color%20%E8%89%B2%E5%BD%A9-ColorBoard%E8%BE%85%E5%8A%A9%E8%89%B2+Tag%E6%A0%87%E7%AD%BE+Chart%E5%9B%BE%E8%A1%A8/index.html'
+    },
+    '辅助色 Accent Color': {
+        tags: ['开发中', '公共'],
+        link: 'http://172.16.132.136:8088/public/design_standards/Color%20%E8%89%B2%E5%BD%A9-ColorBoard%E8%BE%85%E5%8A%A9%E8%89%B2+Tag%E6%A0%87%E7%AD%BE+Chart%E5%9B%BE%E8%A1%A8/index.html#s1'
+    },
+    '按钮 Button': {
+        tags: ['已开发', '公共'],
+        link: 'http://172.16.132.136:8088/public/design_standards/%E6%8C%89%E9%92%AE%E8%A7%84%E8%8C%83/index.html'
+    },
+    '导航栏 icon 交互': {
+        tags: ['开发中', '模块'],
+        link: 'http://172.16.132.136:8088/public/design_standards/%E5%85%A8%E5%B1%80%E5%AF%BC%E8%88%AA%E8%A7%84%E8%8C%83/index.html'
+    },
+    'IP 输入规范': {
+        description: '主要为IP 输入的设计参考，暂不涉及前端组件开发',
+        link: 'http://172.16.132.136:8088/public/design_standards/IP%20%E8%BE%93%E5%85%A5%E8%A7%84%E8%8C%83/index.html'
+    },
     '侧边栏抽屉弹窗交互': {
-        tags: ['已开发']
+        tags: ['已开发'],
+        link: 'http://172.16.132.136:8088/public/design_standards/%E4%BE%A7%E8%BE%B9%E6%A0%8F%E6%8A%BD%E5%B1%89%E5%BC%B9%E7%AA%97%E4%BA%A4%E4%BA%92%E7%BB%9F%E4%B8%80/index.html'
+    },
+    '列表筛选': {
+        tags: ['公共', '未开发'],
+        link: 'http://172.16.132.136:8088/public/design_standards/%E5%88%97%E8%A1%A8%E8%A7%84%E8%8C%83/index.html'
+    },
+    '列表规范': {
+        tags: ['已开发', '公共'],
+        link: 'http://172.16.132.136:8088/public/design_standards/%E5%88%97%E8%A1%A8%E8%A7%84%E8%8C%83/index.html'
+    },
+    '彩色标签 Colorful Tags': {
+        tags: ['已开发', '公共'],
+        link: 'http://172.16.132.136:8088/public/design_standards/Color%20%E8%89%B2%E5%BD%A9-ColorBoard%E8%BE%85%E5%8A%A9%E8%89%B2+Tag%E6%A0%87%E7%AD%BE+Chart%E5%9B%BE%E8%A1%A8/index.html#s2'
+    },
+    '表头筛选规范': {
+        description: '目前主要场景为名称及数量排序规范',
+        tags: ['未开发'],
+        link: 'http://172.16.132.136:8088/public/design_standards/%E8%A1%A8%E5%A4%B4%E7%AD%9B%E9%80%89%E8%A7%84%E8%8C%83%EF%BC%88%E5%90%8D%E7%A7%B0:%E6%95%B0%E9%87%8F%E6%8E%92%E5%BA%8F%EF%BC%89/index.html'
+    },
+    '文字提示Tooltip': {
+        tags: ['公共'],
+        link: 'http://172.16.132.136:8088/public/design_standards/%E6%96%87%E5%AD%97%E6%8F%90%E7%A4%BA%E8%A7%84%E8%8C%83/index.html'
+    },
+    '空数据': {
+        tags: ['已开发', '公共']
+    },
+    '单选框 Radio': {
+        tags: ['未开发']
+    },
+    '后置标签输入框': {
+        tags: ['已开发', '公共']
+    },
+    '多选框 Checkbox': {
+        tags: ['未开发', '公共']
+    },
+    '开关 Switch': {
+        tags: ['已开发', '公共']
+    },
+    '脱敏信息展示': {
+        tags: ['已开发', '公共']
+    },
+    '导入规范': {
+        tags: ['已开发', '公共']
+    },
+    '吞吐报表 Thoughput Chart': {
+        tags: ['开发中', '公共']
+    },
+    '图表颜色': {
+        tags: ['未开发', '公共']
     }
 };
 
